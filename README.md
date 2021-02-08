@@ -32,11 +32,10 @@ postgres 9.4
     
 4. criar grupo no master
        
-    >  SELECT bdr.bdr_group_create(
-    >    local_node_name := 'node1',
-    >    node_external_dsn := 'host=192.168.56.101 user=bdrsync dbname=test_db password=12345#'
-    >  );
-    
+      > SELECT bdr.bdr_group_create(
+       local_node_name := 'node1',
+       node_external_dsn := 'port=5432 dbname=teste_db');
+         
 5. juntar ao grupo na master
     
     >    SELECT bdr.bdr_group_join(
