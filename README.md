@@ -17,12 +17,19 @@ postgres 9.4
 
 1. criar usuário de replicação
     > CREATE USER bdrsync superuser;
+    
     > ALTER USER bdrsync WITH PASSWORD '12345#';
+    
 2. criar banco
+
     > CREATE DATABASE teste_db;
+    
 3. com o banco selecionando adicionar as extensões `btree_gist` e `bdr`
+
     > CREATE EXTENSION btree_gist;
+    
     > CREATE EXTENSION bdr;
+    
 4. criar grupo no master
        
     >  SELECT bdr.bdr_group_create(
