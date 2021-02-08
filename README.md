@@ -24,18 +24,19 @@ postgres 9.4
     > CREATE EXTENSION btree_gist;
     > CREATE EXTENSION bdr;
 4. criar grupo no master
-    > 
-    >  ```SELECT bdr.bdr_group_create(
+       
+    >  SELECT bdr.bdr_group_create(
     >    local_node_name := 'node1',
     >    node_external_dsn := 'host=192.168.56.101 user=bdrsync dbname=test_db password=12345#'
-    >  );```
+    >  );
+    
 5. juntar ao grupo na master
-    >
-    >    ```SELECT bdr.bdr_group_join(
+    
+    >    SELECT bdr.bdr_group_join(
     >        local_node_name := 'node2',
     >        node_external_dsn := 'host=45.55.182.128 user=bdrsync dbname=test_db password=12345#',
     >        join_using_dsn := 'host=192.168.56.101 user=bdrsync dbname=test_db password=12345#'
-    >    );```
+    >    );
 
 
 ## ENV 
