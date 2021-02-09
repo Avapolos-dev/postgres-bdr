@@ -7,42 +7,48 @@ postgres 9.4
 ## Executar comandos no container
  psql --user postgres
 
-[join node](http://bdr-project.org/docs/stable/functions-node-mgmt.html)
+[BDR project doc](http://bdr-project.org/docs/stable/functions-node-mgmt.html)
 
 [tutorial 1](https://yenthanh.medium.com/multi-master-replication-for-postgresql-databases-with-postgres-bdr-eb6d8b1bc189)
 
 [tutorial 2](https://gist.github.com/RafaelMCarvalho/4d5cce26a45d1d5f87d0643a699d41c2)
 
-## Passos
+## Passos usando psql
 
 1. criar usuário de replicação
-    > CREATE USER bdrsync superuser;
-    
-    > ALTER USER bdrsync WITH PASSWORD '12345#';
-    
-2. criar banco
 
-    > CREATE DATABASE teste_db;
+    > psql -c "CREATE USER bdrsync superuser;"
     
-3. com o banco selecionando adicionar as extensões `btree_gist` e `bdr`
+    > psql -c "ALTER USER bdrsync WITH PASSWORD '12345#';"
+        
+2. criar banco a ser replicado
 
-    > CREATE EXTENSION btree_gist;
+    > psql -c "CREATE DATABASE teste_db;"
     
-    > CREATE EXTENSION bdr;
+3. usando o banco criado adicionar as extensões `btree_gist` e `bdr`
+   
+   > psql teste_db -c 'CREATE EXTENSION btree_gist;'
+   
+   > psql teste_db -c 'CREATE EXTENSION bdr;'
     
 4. criar grupo no master
        
-      > SELECT bdr.bdr_group_create(
-       local_node_name := 'node1',
-       node_external_dsn := 'port=5432 dbname=teste_db');
-         
+      > psql
+       \c teste_db
+       SELECT bdr.bdr_group_create(
+           local_node_name := 'master',
+           node_external_dsn := 'host=IP_MASTER_NODE port=5432 user=bdrsync dbname=teste_db password=12345#'
+       ); 
+
 5. juntar ao grupo na master
     
-    >    SELECT bdr.bdr_group_join(
-    >        local_node_name := 'node2',
-    >        node_external_dsn := 'host=45.55.182.128 user=bdrsync dbname=test_db password=12345#',
-    >        join_using_dsn := 'host=192.168.56.101 user=bdrsync dbname=test_db password=12345#'
-    >    );
+    >  psql
+       \c teste_db
+       SELECT bdr.bdr_group_join(
+            local_node_name := 'worker',
+            node_external_dsn := 'host=IP_WORKER_NODE user=bdrsync port=5432  dbname=test_db password=12345#',
+            join_using_dsn := 'host=IP_MASTER_NODE user=bdrsync port=5432  dbname=test_db password=12345#'
+        );
 
 
 ## ENV 
