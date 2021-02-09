@@ -135,19 +135,19 @@ docker_verify_minimum_env() {
 	fi
 	if [ 'trust' = "$POSTGRES_HOST_AUTH_METHOD" ]; then
 		cat >&2 <<-'EOWARN'
-                        ********************************************************************************
-                        WARNING: POSTGRES_HOST_AUTH_METHOD has been set to "trust". This will allow
-                                 anyone with access to the Postgres port to access your database without
-                                 a password, even if POSTGRES_PASSWORD is set. See PostgreSQL
-                                 documentation about "trust":
-                                 https://www.postgresql.org/docs/current/auth-trust.html
-                                 In Docker's default configuration, this is effectively any other
-                                 container on the same system.
-                                 It is not recommended to use POSTGRES_HOST_AUTH_METHOD=trust. Replace
-                                 it with "-e POSTGRES_PASSWORD=password" instead to set a password in
-                                 "docker run".
-                        ********************************************************************************
-                EOWARN
+			********************************************************************************
+			WARNING: POSTGRES_HOST_AUTH_METHOD has been set to "trust". This will allow
+			         anyone with access to the Postgres port to access your database without
+			         a password, even if POSTGRES_PASSWORD is set. See PostgreSQL
+			         documentation about "trust":
+			         https://www.postgresql.org/docs/current/auth-trust.html
+			         In Docker's default configuration, this is effectively any other
+			         container on the same system.
+			         It is not recommended to use POSTGRES_HOST_AUTH_METHOD=trust. Replace
+			         it with "-e POSTGRES_PASSWORD=password" instead to set a password in
+			         "docker run".
+			********************************************************************************
+		EOWARN
 	fi
 }
 
@@ -235,14 +235,14 @@ docker_setup_env() {
 pg_setup_hba_conf() {
         {
                 echo
-                if [ 'trust' = "$POSTGRES_HOST_AUTH_METHOD" ]; then
-                        echo '# warning trust is enabled for all connections'
-                        echo '# see https://www.postgresql.org/docs/12/auth-tru$
-                fi
+		if [ 'trust' = "$POSTGRES_HOST_AUTH_METHOD" ]; then
+			echo '# warning trust is enabled for all connections'
+			echo '# see https://www.postgresql.org/docs/12/auth-trust.html'
+		fi
                 echo "local replication postgres   trust"
                 echo "host replication postgres 127.0.0.1/32    trust"
                 echo "host replication postgres ::1/128         trust"
-                echo "host all all all $POSTGRES_HOST_AUTH_METHOD"
+		echo "host all all all $POSTGRES_HOST_AUTH_METHOD"
                 #echo "host all all 0.0.0.0/0 md5"
         } >> "$PGDATA/pg_hba.conf"
 }
