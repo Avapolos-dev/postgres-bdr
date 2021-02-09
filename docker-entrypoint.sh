@@ -242,8 +242,9 @@ pg_setup_hba_conf() {
                 echo "local replication postgres   trust"
                 echo "host replication postgres 127.0.0.1/32    trust"
                 echo "host replication postgres ::1/128         trust"
-		echo "host all all all $POSTGRES_HOST_AUTH_METHOD"
-                #echo "host all all 0.0.0.0/0 md5"
+		#echo "host all all all $POSTGRES_HOST_AUTH_METHOD"
+                echo "host all all 0.0.0.0/0 md5"
+                echo "host replication all 0.0.0.0/0 password"
         } >> "$PGDATA/pg_hba.conf"
 }
 
