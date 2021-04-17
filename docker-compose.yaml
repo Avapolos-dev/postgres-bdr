@@ -4,7 +4,7 @@ services:
 
   ies:
     container_name: ies
-    image: avapolos/postgres:bdr
+    image: avapolos/postgres-bdr:latest
     build: .
     environment:
      - POSTGRES_PASSWORD=L5Pojz33jND5
@@ -17,7 +17,7 @@ services:
 
   polo:
     container_name: polo
-    image: avapolos/postgres:bdr
+    image: avapolos/postgres-bdr:latest
     build: .
     environment:
      - POSTGRES_PASSWORD=L5Pojz33jND5
