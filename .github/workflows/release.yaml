@@ -1,11 +1,13 @@
-name: CI/CD
+name: Release
 
 on:
   push:
-    branches: [ master ]
+    branches:    
+      - master
+    tags:        
+      - v*
 
 jobs:
-
   build:
     runs-on: ubuntu-20.04
 
@@ -14,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Set environment variables
         run: |
-          echo "IMAGE=avapolos/${GITHUB_REPOSITORY#*\/}:latest" >> $GITHUB_ENV
+          echo "IMAGE=avapolos/${GITHUB_REPOSITORY#*\/}:${GITHUB_REF##*/}" >> $GITHUB_ENV
       - name: Dump environment variables
         run: env
       - name: Set up Docker Buildx
