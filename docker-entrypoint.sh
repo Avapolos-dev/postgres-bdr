@@ -303,6 +303,17 @@ _pg_want_help() {
         return 1
 }
 
+setup_app() {
+        file_env 'APP_USER' 'app'
+        file_env 'APP_PASSWORD' 'password'
+        file_env 'APP_DB' 'app'
+
+        docker_process_sql <<<"CREATE USER $APP_USER WITH LOGIN PASSWORD '$APP_PASSWORD';"
+        docker_process_sql <<<"CREATE DATABASE $APP_DB;"
+        docker_process_sql <<<"ALTER DATABASE $APP_DB OWNER TO $APP_USER;"
+        docker_process_sql <<<"GRANT ALL PRIVILEGES ON DATABASE $APP_DB TO $APP_USER;"
+}
+
 _main() {
         if [[ -d /var/lib/postgresql ]]; then
                 chown -R postgres:postgres /var/lib/postgresql
@@ -339,6 +350,11 @@ _main() {
 
                         docker_setup_db
                         docker_process_init_files /docker-entrypoint-initdb.d/*
+
+                        echo
+                        echo 'Setting up application credentials'
+                        echo
+                        setup_app
 
                         docker_temp_server_stop
                         unset PGPASSWORD
