@@ -28,9 +28,9 @@ services:
       db:
     restart: unless-stopped
 
-  bootstrapper:
-    container_name: bootstrapper
-    image: avapolos/bootstrapper:latest
+  replication-bootstrapper:
+    container_name: replication-bootstrapper
+    image: avapolos/replication-bootstrapper:latest
     environment:
      - POSTGRES_PASSWORD=L5Pojz33jND5
      - APP_USER=moodle
@@ -39,6 +39,16 @@ services:
      - REPLICATION_PEER1=ies
      - REPLICATION_PEER2=polo
      - REPLICATION_PASSWORD=J44eW8g6JAmk
+    networks:
+      db:
+
+  moodle:
+    container_name: moodle
+    image: avapolos/moodle
+    ports:
+      - 8080:80
+    environment:
+      - DEBUG=true
     networks:
       db:
 
