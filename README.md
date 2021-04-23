@@ -1,4 +1,7 @@
 # postgres-bdr
+
+[![CI/CD](https://github.com/avapolo/postgres-bdr/actions/workflows/cicd.yaml/badge.svg)](https://github.com/avapolo/postgres-bdr/actions/workflows/cicd.yaml)
+
 postgres-bdr using alpine image
 
 ## version
