@@ -56,11 +56,13 @@ VOLUME [ /var/lib/postgresql/data ]
 
 # Copy entrypoint and config files.
 COPY docker-entrypoint.sh /
+COPY healthcheck.sh /
 COPY postgresql.conf /
 COPY pg_hba.conf /
 
 # Set entrypoint as executable.
 RUN chmod +x /docker-entrypoint.sh
+RUN chmod +x /healthcheck.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
@@ -68,6 +70,6 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 EXPOSE 5432
 
 HEALTHCHECK --interval=5s --timeout=30s --retries=5 \ 
-  CMD ["pg_isready", "-U", "postgres"]
+  CMD ["/healthcheck.sh"]
 
 CMD ["postgres"]

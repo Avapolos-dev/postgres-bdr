@@ -61,6 +61,8 @@ setup_app() {
 	psql <<<"CREATE DATABASE $APP_DB;"
 	psql <<<"ALTER DATABASE $APP_DB OWNER TO $APP_USER;"
 	psql <<<"GRANT ALL PRIVILEGES ON DATABASE $APP_DB TO $APP_USER;"
+
+  touch "$PGDATA/configured"
 }
 
 if [ "$1" = 'postgres' ]; then
