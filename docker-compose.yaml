@@ -54,6 +54,13 @@ services:
       - 8080:80
     environment:
       - DEBUG=true
+      - DB_HOST=main-db
+      - DB_NAME=moodle
+      - DB_USER=moodle
+      - DB_PASS=gA7cyJtPZdVH
+      - REPLICATION_PEER1=main-db
+      - REPLICATION_PEER2=sync-db
+      - WWW_ROOT=http://localhost:8080
     networks:
       db:
     depends_on:
