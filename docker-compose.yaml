@@ -2,8 +2,8 @@ version: '2.1'
 
 services:
 
-  ies:
-    container_name: ies
+  main-db:
+    container_name: main-db
     image: avapolos/postgres-bdr:latest
     build: .
     environment:
@@ -15,8 +15,8 @@ services:
       db:
     restart: unless-stopped
 
-  polo:
-    container_name: polo
+  sync-db:
+    container_name: sync-db
     image: avapolos/postgres-bdr:latest
     build: .
     environment:
@@ -36,11 +36,16 @@ services:
      - APP_USER=moodle
      - APP_PASSWORD=gA7cyJtPZdVH
      - APP_DB=moodle
-     - REPLICATION_PEER1=ies
-     - REPLICATION_PEER2=polo
+     - REPLICATION_MAIN=main-db
+     - REPLICATION_SYNC=sync-db
      - REPLICATION_PASSWORD=J44eW8g6JAmk
     networks:
       db:
+    depends_on:
+      main-db:
+        condition: service_healthy
+      sync-db:
+        condition: service_healthy
 
   moodle:
     container_name: moodle
@@ -51,6 +56,9 @@ services:
       - DEBUG=true
     networks:
       db:
+    depends_on:
+      replication-bootstrapper:
+        condition: service_completed_successfully
 
 networks:
   db:

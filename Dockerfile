@@ -67,4 +67,7 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 # Expose default port
 EXPOSE 5432
 
+HEALTHCHECK --interval=5s --timeout=30s --retries=5 \ 
+  CMD ["pg_isready", "-U", "postgres"]
+
 CMD ["postgres"]
